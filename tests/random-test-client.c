@@ -56,8 +56,41 @@ int main(void)
 */
 
     /* TCP */
-    ctx = modbus_new_tcp("127.0.0.1", 1502);
-    modbus_set_debug(ctx, TRUE);
+    const char* localIpAddress;
+    int port;
+
+    /*Adding the ability to configure ip and port*/
+    if (argc > 1)
+        localIpAddress = argv[1];
+    else
+        localIpAddress = "localhost";
+
+    if (argc > 2)
+        port = atoi(argv[2]);
+    else
+        port = 1502;
+
+    /* TCP */
+    if (argc > 3) {
+        if (strcmp(argv[3], "tcp") == 0) {
+            use_backend = TCP;
+        }
+        else if (strcmp(argv[3], "rtu") == 0) {
+            use_backend = RTU;
+        }
+        else {
+            printf("Usage:\n  %s [tcp|rtu] - Modbus client to measure data bandwith\n\n", argv[0]);
+            exit(1);
+        }
+    }
+    else {
+        /* By default */
+        use_backend = TCP;
+    }
+
+    if (use_backend == TCP) {
+        ctx = modbus_new_tcp(localIpAddress, port);
+        modbus_set_debug(ctx, TRUE);
 
     if (modbus_connect(ctx) == -1) {
         fprintf(stderr, "Connection failed: %s\n",
