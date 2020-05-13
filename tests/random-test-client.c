@@ -49,13 +49,6 @@ int main(void)
     uint16_t *tab_rw_rq_registers;
     uint16_t *tab_rp_registers;
 
-    /* RTU */
-/*
-    ctx = modbus_new_rtu("/dev/ttyUSB0", 19200, 'N', 8, 1);
-    modbus_set_slave(ctx, SERVER_ID);
-*/
-
-    /* TCP */
     const char* localIpAddress;
     int port;
 
